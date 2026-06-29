@@ -1,0 +1,59 @@
+# Video Fingerprinting System Configuration
+
+# General API settings
+server:
+  host: "0.0.0.0"
+  port: 8000
+  db_dir: "fingerprints_db"
+
+# Frame sampling options
+sampling:
+  # Frame sampling interval (in seconds). 1 means 1 frame per second.
+  interval_seconds: 1
+
+# Feature Extraction and Comparison settings
+features:
+  blake3:
+    enabled: true
+
+  phash:
+    enabled: true
+    # Maximum hamming distance difference per frame (smaller means more similar)
+    hamming_threshold: 8
+    # Minimum similarity percentage threshold to be declared a duplicate
+    duplicate_threshold_pct: 90.0
+
+  ai_embedding:
+    enabled: true
+    # OpenCLIP model: ViT-B-32
+    model_name: "ViT-B-32"
+    pretrained: "laion2b_s34b_b79k"
+    # Cosine similarity threshold per frame (0.0 - 1.0)
+    cosine_threshold: 0.85
+    # Minimum similarity percentage threshold to be declared a duplicate
+    duplicate_threshold_pct: 90.0
+    # Batch size for processing frames concurrently on GPU
+    batch_size: 16
+
+  audio:
+    enabled: true
+    # Maximum Chromaprint subprint bit difference (smaller means more similar)
+    max_bit_diff: 4
+    # Minimum similarity percentage threshold to be declared a duplicate
+    duplicate_threshold_pct: 90.0
+
+  motion:
+    enabled: true
+    # Mean Squared Error (MSE) tolerance threshold for Optical Flow per second
+    max_mse_threshold: 1.5
+    # Minimum similarity percentage threshold to be declared a duplicate
+    duplicate_threshold_pct: 90.0
+
+  scene:
+    enabled: true
+    # ContentDetector sensitivity threshold (default: 27.0, lower is more sensitive)
+    detector_threshold: 27.0
+    # Tolerance window for scene start time and duration (in seconds)
+    time_tolerance_seconds: 1.0
+    # Minimum scene structure similarity percentage threshold to be declared a duplicate
+    duplicate_threshold_pct: 90.0
